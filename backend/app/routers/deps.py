@@ -89,12 +89,22 @@ def get_document_processor(
     )
 
 
+from app.handlers.orchestration_engine import OrchestrationEngine, RerankerService
+
+
 def get_chat_service(
     config_manager: ConfigurationManager = Depends(get_config_manager),
     db_session: AsyncSession = Depends(get_db),
+    qdrant_client = Depends(get_qdrant_client),
 ) -> ChatService:
     """Creates ChatService instance."""
+    orchestration_engine = OrchestrationEngine(
+        config_manager=config_manager,
+        qdrant_client=qdrant_client,
+    )
     return ChatService(
         config_manager=config_manager,
         db_session=db_session,
+        orchestration_engine=orchestration_engine,
     )
+
