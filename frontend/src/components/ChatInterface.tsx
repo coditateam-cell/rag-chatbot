@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Sparkles, ChevronDown, ChevronUp, Plus, Loader2 } from 'lucide-react';
+import { Send, Sparkles, ChevronDown, Plus, Loader2 } from 'lucide-react';
 import type { ChatMessage, RankedChunk, DocumentMetadata } from '../api/client';
 import { api } from '../api/client';
 
