@@ -177,7 +177,7 @@ async def test_unit_session_history_context_maintenance() -> None:
         "What is task A?": "Task A is about scheduling.",
         "What is task B?": "Task B is about testing."
     }
-    llm_service.generate_response.side_effect = lambda prompt: next(
+    llm_service.generate_response.side_effect = lambda prompt, **kwargs: next(
         (resp for q, resp in llm_responses.items() if q in prompt),
         "Default LLM answer"
     )

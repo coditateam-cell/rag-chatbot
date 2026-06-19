@@ -336,27 +336,23 @@ class ChatService:
 
         # 6. Check for no relevant context threshold (Requirement 3.13)
         if not formatted_prompt:
-            formatted_prompt = (
-                f"System: You are a helpful AI assistant. You could not find relevant context "
-                f"in the uploaded documents for this question. Inform the user of this politely, "
-                f"and optionally provide a general helpful answer.\n\nUser: {user_query}"
-            )
+            answer = "No relevant information found in uploaded documents."
+        else:
+            # Load conversation history for context (Requirement 11.2)
+            history_messages = []
+            try:
+                prev_messages = await self.get_history(session_id)
+                for msg in prev_messages:
+                    history_messages.append({"role": msg.role, "content": msg.content})
+            except Exception as exc:
+                logger.warning("Failed to load history for LLM context: %s", exc)
 
-        # Load conversation history for context (Requirement 11.2)
-        history_messages = []
-        try:
-            prev_messages = await self.get_history(session_id)
-            for msg in prev_messages:
-                history_messages.append({"role": msg.role, "content": msg.content})
-        except Exception as exc:
-            logger.warning("Failed to load history for LLM context: %s", exc)
-
-        # 7. Generate response using OpenRouter language model (Requirement 3.9, 3.10)
-        try:
-            answer = await self.llm_service.generate_response(formatted_prompt, history_messages=history_messages)
-        except LLMResponseError as exc:
-            logger.error("LLM response generation failed in chat service: %s", exc)
-            raise ChatServiceError("response_failure", "Response generation failed.") from exc
+            # 7. Generate response using OpenRouter language model (Requirement 3.9, 3.10)
+            try:
+                answer = await self.llm_service.generate_response(formatted_prompt, history_messages=history_messages)
+            except LLMResponseError as exc:
+                logger.error("LLM response generation failed in chat service: %s", exc)
+                raise ChatServiceError("response_failure", "Response generation failed.") from exc
 
         # 8. Persist query & response in database metadata store (Requirement 3.12, 11.2, 11.6, 13.10)
         await self._persist_interaction(
