@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS documents (
     file_size_bytes   BIGINT      NOT NULL,
     format            TEXT        NOT NULL,   -- pdf | docx | pptx | xlsx | xls | txt | png | jpg | jpeg
     processing_status TEXT        NOT NULL DEFAULT 'pending',  -- pending | processing | completed | failed
-    error_detail      TEXT
+    error_detail      TEXT,
+    session_id        UUID
 );
 
 -- ---------------------------------------------------------------------------

@@ -95,7 +95,8 @@ export const api = {
   // Document endpoints
   async uploadDocument(
     file: File,
-    onProgress?: (progress: number) => void
+    onProgress?: (progress: number) => void,
+    sessionId?: string
   ): Promise<{ document_id: string; upload_timestamp: string }> {
     const formData = new FormData();
     formData.append('file', file);
@@ -104,7 +105,8 @@ export const api = {
     if (onProgress) {
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', `${API_BASE_URL}/documents/upload`);
+        const uploadUrl = `${API_BASE_URL}/documents/upload` + (sessionId ? `?session_id=${sessionId}` : '');
+        xhr.open('POST', uploadUrl);
         
         xhr.upload.onprogress = (event) => {
           if (event.lengthComputable) {
@@ -140,17 +142,17 @@ export const api = {
       });
     }
 
-    const response = await fetch(`${API_BASE_URL}/documents/upload`, {
+    const uploadUrl = `${API_BASE_URL}/documents/upload` + (sessionId ? `?session_id=${sessionId}` : '');
+    const response = await fetch(uploadUrl, {
       method: 'POST',
       body: formData,
     });
     return handleResponse<{ document_id: string; upload_timestamp: string }>(response);
   },
 
-  async listDocuments(limit = 10, offset = 0): Promise<DocumentMetadata[]> {
-    const response = await fetch(
-      `${API_BASE_URL}/documents?limit=${limit}&offset=${offset}`
-    );
+  async listDocuments(limit = 10, offset = 0, sessionId?: string): Promise<DocumentMetadata[]> {
+    const url = `${API_BASE_URL}/documents?limit=${limit}&offset=${offset}` + (sessionId ? `&session_id=${sessionId}` : '');
+    const response = await fetch(url);
     return handleResponse<DocumentMetadata[]>(response);
   },
 

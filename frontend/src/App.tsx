@@ -78,7 +78,7 @@ function App() {
 
   const fetchDocuments = async () => {
     try {
-      const docs = await api.listDocuments(200, 0);
+      const docs = await api.listDocuments(200, 0, sessionId || undefined);
       setDocuments(docs);
     } catch (err: any) {
       addToast('error', `Failed to fetch documents: ${err.detail || 'Connection failure'}`);
@@ -87,11 +87,11 @@ function App() {
 
   useEffect(() => {
     initSession();
-    fetchDocuments();
   }, []);
 
   useEffect(() => {
     if (sessionId) {
+      fetchDocuments();
       api.getChatHistory(sessionId)
         .then(history => {
           setMessages(history);
@@ -240,7 +240,7 @@ function App() {
                     <p style={{ color: 'hsl(var(--text-muted))', marginTop: '8px' }}>Please wait while your document is being processed.</p>
                   </div>
                 )}
-                <UploadForm onUploadSuccess={handleUploadSuccess} addToast={addToast} />
+                <UploadForm onUploadSuccess={handleUploadSuccess} addToast={addToast} sessionId={sessionId} />
               </div>
               
               {documents.length > 0 && (

@@ -25,12 +25,13 @@ router = APIRouter(prefix="/documents", tags=["documents"])
 async def upload_document(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
+    session_id: str = Query(None),
     upload_handler = Depends(get_upload_handler),
     doc_processor = Depends(get_document_processor),
 ):
     """Uploads a document file and schedules its parsing/indexing asynchronously."""
     try:
-        result = await upload_handler.upload(file)
+        result = await upload_handler.upload(file, session_id=session_id)
         # Run parsing and chunk processing asynchronously in the background
         background_tasks.add_task(doc_processor.process, result.document_id)
         return {
@@ -52,18 +53,31 @@ async def upload_document(
 async def list_documents(
     limit: int = Query(10, ge=1, le=200),
     offset: int = Query(0, ge=0),
+    session_id: str = Query(None),
     db = Depends(get_db),
 ):
     """Retrieve a list of uploaded documents with pagination."""
-    stmt = text(
-        """
-        SELECT document_id, filename, upload_timestamp, file_size_bytes, format, processing_status, error_detail
-        FROM documents
-        ORDER BY upload_timestamp DESC
-        LIMIT :limit OFFSET :offset
-        """
-    )
-    res = await db.execute(stmt, {"limit": limit, "offset": offset})
+    if session_id:
+        stmt = text(
+            """
+            SELECT document_id, filename, upload_timestamp, file_size_bytes, format, processing_status, error_detail
+            FROM documents
+            WHERE session_id = :session_id OR session_id IS NULL
+            ORDER BY upload_timestamp DESC
+            LIMIT :limit OFFSET :offset
+            """
+        )
+        res = await db.execute(stmt, {"limit": limit, "offset": offset, "session_id": session_id})
+    else:
+        stmt = text(
+            """
+            SELECT document_id, filename, upload_timestamp, file_size_bytes, format, processing_status, error_detail
+            FROM documents
+            ORDER BY upload_timestamp DESC
+            LIMIT :limit OFFSET :offset
+            """
+        )
+        res = await db.execute(stmt, {"limit": limit, "offset": offset})
     rows = res.fetchall()
 
     docs = []

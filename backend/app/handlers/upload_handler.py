@@ -93,7 +93,7 @@ class UploadHandler:
             raise RuntimeError("Database session not provided. Use dependency injection in FastAPI routes.")
         return self._db_session
 
-    async def upload(self, file: UploadFile) -> UploadResult:
+    async def upload(self, file: UploadFile, session_id: Optional[str] = None) -> UploadResult:
         """Process and store an uploaded file.
 
         Performs validation, security scanning, storage in MinIO, and metadata
@@ -173,6 +173,7 @@ class UploadHandler:
                 filename=filename,
                 file_size=file_size,
                 format=file_format,
+                session_id=session_id,
             )
         except Exception as exc:
             detail = "Failed to store file metadata. Please retry."
@@ -289,6 +290,7 @@ class UploadHandler:
         filename: str,
         file_size: int,
         format: str,
+        session_id: Optional[str] = None,
     ) -> None:
         """Write document metadata to PostgreSQL (Requirement 1.1, 2.9)."""
         # Use the async session from dependency injection
@@ -300,15 +302,20 @@ class UploadHandler:
             stmt = text(
                 """
                 INSERT INTO documents 
-                (document_id, filename, file_size_bytes, format, processing_status)
-                VALUES (:document_id, :filename, :file_size_bytes, :format, 'pending')
+                (document_id, filename, file_size_bytes, format, processing_status, session_id)
+                VALUES (:document_id, :filename, :file_size_bytes, :format, 'pending', :session_id)
                 """
             )
+            
+            use_local = os.getenv("USE_LOCAL_MODE", "false").lower() == "true"
+            session_id_val = str(session_id) if (session_id and use_local) else session_id
+
             await session.execute(stmt, {
                 "document_id": str(document_id),
                 "filename": filename,
                 "file_size_bytes": file_size,
                 "format": format,
+                "session_id": session_id_val,
             })
             await session.commit()
             logger.debug("Wrote metadata to PostgreSQL for document %s", document_id)

@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS documents (
     file_size_bytes   INTEGER NOT NULL,
     format            TEXT NOT NULL,
     processing_status TEXT NOT NULL DEFAULT 'pending',
-    error_detail      TEXT
+    error_detail      TEXT,
+    session_id        TEXT
 );
 
 CREATE TABLE IF NOT EXISTS chat_sessions (

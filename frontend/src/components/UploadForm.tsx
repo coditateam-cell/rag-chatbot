@@ -5,12 +5,13 @@ import { api } from '../api/client';
 interface UploadFormProps {
   onUploadSuccess: (docId: string) => void;
   addToast: (type: 'success' | 'error', message: string) => void;
+  sessionId?: string | null;
 }
 
 const ALLOWED_EXTENSIONS = ['.pdf', '.docx', '.pptx', '.xlsx', '.xls', '.txt', '.png', '.jpg', '.jpeg'];
 const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500 MB
 
-export const UploadForm: React.FC<UploadFormProps> = ({ onUploadSuccess, addToast }) => {
+export const UploadForm: React.FC<UploadFormProps> = ({ onUploadSuccess, addToast, sessionId }) => {
   const [isDragActive, setIsDragActive] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -42,7 +43,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({ onUploadSuccess, addToas
     try {
       const response = await api.uploadDocument(file, (progress) => {
         setUploadProgress(progress);
-      });
+      }, sessionId || undefined);
       addToast('success', `"${file.name}" uploaded successfully! Chunk processing started.`);
       onUploadSuccess(response.document_id);
     } catch (err: any) {
