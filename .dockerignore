@@ -1,0 +1,32 @@
+# Version Control
+.git
+.gitignore
+
+# Python Virtual Environments & Cache
+**/venv/
+**/.venv/
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.pytest_cache/
+.hypothesis/
+
+# Javascript / Frontend
+**/node_modules/
+**/dist/
+**/build/
+.npm
+.eslintcache
+
+# Local Docker Data Volumes (Prevents copying mounted storage)
+**/postgres_data/
+**/minio_data/
+**/qdrant_data/
+**/qdrant_storage/
+**/test-results/
+
+# Environment Secrets (Ensure credentials are not baked into docker layers)
+.env
+.env.*
+!.env.example

@@ -1,0 +1,54 @@
+# ---------------------------------------------------------------------------
+# Backend Python dependencies — pinned versions
+# ---------------------------------------------------------------------------
+
+# Web framework
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+
+# Data validation
+pydantic==2.7.1
+pydantic-settings==2.2.1
+
+# Database (async SQLAlchemy + PostgreSQL driver)
+sqlalchemy[asyncio]==2.0.30
+asyncpg==0.29.0
+aiosqlite==0.20.0          # Required for SQLite async engine (local/HF mode)
+
+# Vector store client
+qdrant-client==1.9.1
+
+# Object storage client
+minio==7.2.7
+
+# File handling
+python-multipart==0.0.9
+
+# Document parsing and RAG pipeline
+llama-index==0.10.40
+llama-index-vector-stores-qdrant==0.2.8
+llama-index-readers-file==0.1.33
+
+# Lightweight document parsers (replacing unstructured[all-docs])
+pypdf==4.2.0          # PDF parsing (lightweight, pure Python)
+python-docx==1.1.2   # DOCX parsing
+python-pptx==0.6.23  # PPTX parsing
+openpyxl==3.1.5      # XLSX parsing
+xlrd==2.0.1           # XLS parsing
+
+# LLM / embedding provider
+openai==1.30.1
+
+# Reranker provider (lightweight HTTP-based)
+cohere==5.5.4
+
+# HTTP client
+httpx==0.27.0
+
+# Configuration
+pyyaml==6.0.1
+
+# Testing
+hypothesis==6.103.1
+pytest==8.2.1
+pytest-asyncio==0.23.7

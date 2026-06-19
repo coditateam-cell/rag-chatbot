@@ -1,0 +1,35 @@
+# ---------------------------------------------------------------------------
+# RAG Chatbot — default application configuration
+# Loaded and validated by ConfigurationManager at startup.
+# All values below are within their defined valid ranges.
+# ---------------------------------------------------------------------------
+
+prompt_templates:
+  system_instructions: >
+    You are a helpful assistant. You have access to some uploaded context documents.
+    1. If the user query is a greeting, introduction, or general chit-chat (e.g. 'hello', 'hi', 'how are you', 'what can you do'), respond politely and offer help.
+    2. If the user query is a question about the documents or uploaded files, answer based strictly on the provided context. Do not make up facts.
+    3. If the context does not contain enough information to answer a question about the documents, politely explain that the information is not found in the uploaded documents.
+
+chunking:
+  chunk_size_tokens: 400        # valid range: 300–500
+  overlap_percentage: 12        # valid range: 10–15  (percent)
+  enable_contextual_summaries: true
+
+models:
+  llm_model_name: "google/gemini-2.5-flash"
+  llm_fallback_models:
+    - "meta-llama/llama-3-8b-instruct:free"
+    - "google/gemma-2-9b-it:free"
+  embedding_model_name: "nvidia/llama-nemotron-embed-vl-1b-v2:free"
+
+reranker:
+  reranker_provider: "cohere"           # cohere | jina
+  reranker_model_name: "rerank-english-v3.0"
+  reranker_top_k: 5                     # valid range: 1–20
+
+retrieval:
+  top_k: 20
+  similarity_threshold: 0.0
+  max_chunks_evaluated: 100
+  prompt_max_chars: 8000

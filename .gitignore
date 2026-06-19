@@ -1,0 +1,149 @@
+# ===========================================================================
+# .gitignore — RAG Chatbot (FastAPI + React/Vite + Docker)
+# ===========================================================================
+
+# ---------------------------------------------------------------------------
+# SECRETS & ENVIRONMENT VARIABLES — never commit these!
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# ---------------------------------------------------------------------------
+# PYTHON
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+dist/
+build/
+*.egg
+*.egg-info/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+wheels/
+
+# Testing
+.pytest_cache/
+.hypothesis/
+.tox/
+.nox/
+*.cover
+*.coverage
+.coverage
+coverage.xml
+htmlcov/
+test-results/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Jupyter
+*.ipynb_checkpoints
+profile_default/
+ipython_config.py
+
+# pyBuilder
+.pybuilder/
+target/
+
+# ---------------------------------------------------------------------------
+# DATABASE & STORAGE — local runtime data (never commit)
+# ---------------------------------------------------------------------------
+data/
+*.db
+*.sqlite
+*.sqlite3
+qdrant_storage/
+
+# ---------------------------------------------------------------------------
+# NODE / FRONTEND
+# ---------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnp/
+.pnp.js
+.yarn/install-state.gz
+
+# Build output
+frontend/dist/
+frontend/build/
+.next/
+out/
+.nuxt/
+.cache/
+.parcel-cache/
+.turbo/
+*.tsbuildinfo
+
+# ---------------------------------------------------------------------------
+# LOGS
+# ---------------------------------------------------------------------------
+logs/
+*.log
+*.log.*
+
+# ---------------------------------------------------------------------------
+# DOCKER
+# ---------------------------------------------------------------------------
+docker-compose.override.yml
+
+# ---------------------------------------------------------------------------
+# IDEs & EDITORS
+# ---------------------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# ---------------------------------------------------------------------------
+# OS FILES
+# ---------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ---------------------------------------------------------------------------
+# MISC
+# ---------------------------------------------------------------------------
+*.pot
+*.mo
+*.po
+.webassets-cache
+.scrapy
+docs/_build/
