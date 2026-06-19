@@ -26,19 +26,23 @@ _minio_client = None
 
 
 def get_qdrant_client() -> QdrantClient:
-    """Lazy-load Qdrant client. Supports both self-hosted and Qdrant Cloud."""
+    """Lazy-load Qdrant client. Supports local mode, Qdrant Cloud, and self-hosted."""
     global _qdrant_client
     if _qdrant_client is None:
-        qdrant_url = os.getenv("QDRANT_URL")
-        qdrant_api_key = os.getenv("QDRANT_API_KEY")
-        if qdrant_url:
-            # Qdrant Cloud managed service
-            _qdrant_client = QdrantClient(url=qdrant_url, api_key=qdrant_api_key)
+        use_local = os.getenv("USE_LOCAL_MODE", "false").lower() == "true"
+        if use_local:
+            _qdrant_client = QdrantClient(path="./data/qdrant")
         else:
-            # Self-hosted (local Docker)
-            host = os.getenv("QDRANT_HOST", "qdrant")
-            port = int(os.getenv("QDRANT_PORT", "6333"))
-            _qdrant_client = QdrantClient(host=host, port=port)
+            qdrant_url = os.getenv("QDRANT_URL")
+            qdrant_api_key = os.getenv("QDRANT_API_KEY")
+            if qdrant_url:
+                # Qdrant Cloud managed service
+                _qdrant_client = QdrantClient(url=qdrant_url, api_key=qdrant_api_key)
+            else:
+                # Self-hosted (local Docker)
+                host = os.getenv("QDRANT_HOST", "qdrant")
+                port = int(os.getenv("QDRANT_PORT", "6333"))
+                _qdrant_client = QdrantClient(host=host, port=port)
     return _qdrant_client
 
 
