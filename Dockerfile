@@ -24,6 +24,9 @@ COPY backend/requirements.txt ./
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
+# Pre-download NLTK data as root to prevent permission errors at runtime (UID 1000 cannot write to site-packages)
+RUN python -c "import nltk; nltk.download('punkt', download_dir='/usr/local/lib/python3.11/site-packages/llama_index/core/_static/nltk_cache'); nltk.download('punkt_tab', download_dir='/usr/local/lib/python3.11/site-packages/llama_index/core/_static/nltk_cache'); nltk.download('stopwords', download_dir='/usr/local/lib/python3.11/site-packages/llama_index/core/_static/nltk_cache')"
+
 # Copy backend code
 COPY backend/ ./backend/
 
