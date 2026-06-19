@@ -207,7 +207,8 @@ class ChatService:
                 ORDER BY timestamp ASC
                 """
             )
-            res = await session.execute(stmt, {"session_id": session_id})
+            use_local = os.getenv("USE_LOCAL_MODE", "false").lower() == "true"
+            res = await session.execute(stmt, {"session_id": str(session_id) if use_local else session_id})
             rows = res.fetchall()
             
             messages = []
