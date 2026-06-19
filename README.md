@@ -1,6 +1,5 @@
 ---
 title: RAG Document Chat System
-emoji: 🤖
 colorFrom: purple
 colorTo: blue
 sdk: docker
