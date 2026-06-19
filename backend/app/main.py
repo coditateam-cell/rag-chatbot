@@ -223,12 +223,6 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
 # API Routes Wiring
 # ---------------------------------------------------------------------------
 
-@app.get("/", summary="Health check", tags=["health"])
-async def health_check() -> JSONResponse:
-    """Returns a simple liveness response to verify that the app is running."""
-    return JSONResponse(content={"status": "ok"})
-
-
 @app.get("/health", summary="Detailed health check of database and storage dependencies", tags=["health"])
 async def detailed_health_check() -> JSONResponse:
     """Verifies connection health to PostgreSQL, Qdrant, and MinIO (Req 8.7)."""
