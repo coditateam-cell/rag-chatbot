@@ -167,7 +167,7 @@ async def test_unit_session_history_context_maintenance() -> None:
         position_in_document=0,
     )
     orchestration_engine = AsyncMock()
-    async def mock_orchestrate(query_vector, query_text):
+    async def mock_orchestrate(query_vector, query_text, document_ids=None):
         return ([RankedChunk(chunk=c, score=0.85)], f"prompt with {query_text}")
     orchestration_engine.orchestrate.side_effect = mock_orchestrate
 

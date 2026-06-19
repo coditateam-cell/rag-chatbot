@@ -203,7 +203,7 @@ async def test_property_17_completed_interactions_persist_fields(session_id: uui
         llm_service=None,
     )
 
-    async def mock_orchestrate(query_vector, query_text):
+    async def mock_orchestrate(query_vector, query_text, document_ids=None):
         res = chat_service.orchestration_engine.reranker_service.rerank(query_text, [])
         if asyncio.iscoroutine(res):
             await res
@@ -297,7 +297,7 @@ async def test_property_25_timestamps_non_null(session_id: uuid.UUID, user_query
         llm_service=None,
     )
 
-    async def mock_orchestrate(query_vector, query_text):
+    async def mock_orchestrate(query_vector, query_text, document_ids=None):
         res = chat_service.orchestration_engine.reranker_service.rerank(query_text, [])
         if asyncio.iscoroutine(res):
             await res
@@ -362,7 +362,7 @@ async def test_property_29_reranking_metadata_persisted(session_id: uuid.UUID, u
         llm_service=None,
     )
 
-    async def mock_orchestrate(query_vector, query_text):
+    async def mock_orchestrate(query_vector, query_text, document_ids=None):
         res = chat_service.orchestration_engine.reranker_service.rerank(query_text, [])
         if asyncio.iscoroutine(res):
             await res
